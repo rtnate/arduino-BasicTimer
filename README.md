@@ -1,2 +1,2 @@
 # arduino-BasicTimer
-Basic Timer Arduino Library
+Basic Timer Library For Aduino Cores

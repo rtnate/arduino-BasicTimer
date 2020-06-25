@@ -1,3 +1,60 @@
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//!  @file  BasicTimer.h
+//!  @brief Basic Timer Library Class Definitions
+//!
+//!  @author Nate Taylor \n
+//!  Contact: nate@rtelectronix.com
+//!  @copyright (C) 2020 Nate Taylor - All Rights Reserved.
+//
+//      |-----------------------------------------------------------------------------------------|
+//      |                                                                                         |
+//      |                    MMMMMMMMMMMMMMMMMMMMMM   MMMMMMMMMMMMMMMMMM                          |
+//      |                    MMMMMMMMMMMMMMMMMMMMMM   MMMMMMMMMMMMMMMMMM                          |
+//      |                   MMMMMMMMM    MMMMMMMMMM       MMMMMMMMM                               |
+//      |                   MMMMMMMM:    MMMMMMMMMM       MMMMMMMM                                |
+//      |                  MMMMMMMMMMMMMMMMMMMMMMM       MMMMMMMMM                                |
+//      |                 MMMMMMMMMMMMMMMMMMMMMM         MMMMMMMM                                 |
+//      |                 MMMMMMMM     MMMMMMM          MMMMMMMM                                  |
+//      |                MMMMMMMMM    MMMMMMMM         MMMMMMMMM                                  |
+//      |                MMMMMMMM     MMMMMMM          MMMMMMMM                                   |
+//      |               MMMMMMMM     MMMMMMM          MMMMMMMMM                                   |
+//      |                           MMMMMMMM        MMMMMMMMMM                                    |
+//      |                          MMMMMMMMM       MMMMMMMMMMM                                    |
+//      |                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                |
+//      |                        MMMMMMM      E L E C T R O N I X         MMMMMM                  |
+//      |                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                    |
+//      |                                                                                         |
+//      |-----------------------------------------------------------------------------------------|
+//
+//      |-----------------------------------------------------------------------------------------|
+//      |                                                                                         |
+//      |      [MIT License]                                                                      |
+//      |                                                                                         |
+//      |      Copyright (c) 2020 Nathaniel Taylor                                                |
+//      |                                                                                         |
+//      |      Permission is hereby granted, free of charge, to any person obtaining a copy       |
+//      |      of this software and associated documentation files (the "Software"), to deal      |
+//      |      in the Software without restriction, including without limitation the rights       |
+//      |      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell          |
+//      |      copies of the Software, and to permit persons to whom the Software is              |
+//      |      furnished to do so, subject to the following conditions:                           |
+//      |                                                                                         |
+//      |      The above copyright notice and this permission notice shall be included in all     |
+//      |      copies or substantial portions of the Software.                                    |
+//      |                                                                                         |
+//      |      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR         |
+//      |      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,           |
+//      |      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE        |
+//      |      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER             |
+//      |      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,      |
+//      |      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE      |
+//      |      SOFTWARE.                                                                          |
+//      |                                                                                         |
+//      |-----------------------------------------------------------------------------------------|
+//
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 #ifndef _BASIC_TIMER_H_
 #define _BASIC_TIMER_H_
 
@@ -24,12 +81,12 @@ class TBasicTimer
          * 
          * @param timeout The timers timeout in milliseconds
          */
-        TBasicTimer(timer_t timeout): _value(0), _timeout(timeout){};
+        TBasicTimer(timer_t timeout):  lastReset(0), storedTimeout(timeout){};
 
         /**
          * @brief Resets the timer (so that it is no longer expired)
          */
-        void reset(){ _value = now(); };
+        void reset(){  lastReset = now(); };
 
         /**
          * @brief Check if the timer has expired
@@ -40,7 +97,7 @@ class TBasicTimer
         bool hasExpired() 
         {
             auto current = now();
-            if (current - _value > _timeout) return true;
+            if (current -  lastReset > storedTimeout) return true;
             else return false;
         }
 
@@ -59,7 +116,7 @@ class TBasicTimer
          * 
          * @param timeout The new timer period in milliseconds
          */
-        void setTimeout(timer_t timeout){ _timeout = timeout; };
+        void setTimeout(timer_t timeout){ storedTimeout = timeout; };
 
         /**
          * @brief Runs the timer, executing the supplied function if the timer has expired.
@@ -76,8 +133,8 @@ class TBasicTimer
             }
         }
     protected:
-        timer_t _value; //!< The last timestamp at which the timer was reset
-        timer_t _timeout;//!< The timeout value in milliseconds
+        timer_t  lastReset; //!< The last timestamp at which the timer was reset
+        timer_t storedTimeout;//!< The timeout value in milliseconds
 };
 
 /**
@@ -94,13 +151,13 @@ class TStaticTimer
          * @brief Construct a new TStaticTimer object
          * 
          */
-        TStaticTimer(): _value(0){};
+        TStaticTimer():  lastReset(0){};
 
         /**
          * @brief Reset the timer, setting its value to the current time
          * 
          */
-        void reset(){ _value = now(); };
+        void reset(){  lastReset = now(); };
 
         /**
          * @brief Checks it the timer has expired
@@ -111,7 +168,7 @@ class TStaticTimer
         bool hasExpired() 
         {
             auto current = millis();
-            if (current - _value > TIMEOUT) return true;
+            if (current -  lastReset > TIMEOUT) return true;
             else return false;
         }
 
@@ -140,7 +197,7 @@ class TStaticTimer
             }
         }
     protected:
-        timer_t _value;
+        timer_t  lastReset;
 };
 
 /**
