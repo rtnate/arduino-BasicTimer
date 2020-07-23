@@ -9,18 +9,18 @@
 //
 //      |-----------------------------------------------------------------------------------------|
 //      |                                                                                         |
-//      |                    MMMMMMMMMMMMMMMMMMMMMM   MMMMMMMMMMMMMMMMMM                          |
-//      |                    MMMMMMMMMMMMMMMMMMMMMM   MMMMMMMMMMMMMMMMMM                          |
-//      |                   MMMMMMMMM    MMMMMMMMMM       MMMMMMMMM                               |
-//      |                   MMMMMMMM:    MMMMMMMMMM       MMMMMMMM                                |
-//      |                  MMMMMMMMMMMMMMMMMMMMMMM       MMMMMMMMM                                |
-//      |                 MMMMMMMMMMMMMMMMMMMMMM         MMMMMMMM                                 |
-//      |                 MMMMMMMM     MMMMMMM          MMMMMMMM                                  |
-//      |                MMMMMMMMM    MMMMMMMM         MMMMMMMMM                                  |
-//      |                MMMMMMMM     MMMMMMM          MMMMMMMM                                   |
-//      |               MMMMMMMM     MMMMMMM          MMMMMMMMM                                   |
-//      |                           MMMMMMMM        MMMMMMMMMM                                    |
-//      |                          MMMMMMMMM       MMMMMMMMMMM                                    |
+//      |                    MMMMMMMMMMMMMMMMMMMMMM   NNNNNNNNNNNNNNNNNN                          |
+//      |                    MMMMMMMMMMMMMMMMMMMMMM   NNNNNNNNNNNNNNNNNN                          |
+//      |                   MMMMMMMMM    MMMMMMMMMM       NNNNNMNNN                               |
+//      |                   MMMMMMMM:    MMMMMMMMMM       NNNNNNNN                                |
+//      |                  MMMMMMMMMMMMMMMMMMMMMMM       NNNNNNNNN                                |
+//      |                 MMMMMMMMMMMMMMMMMMMMMM         NNNNNNNN                                 |
+//      |                 MMMMMMMM     MMMMMMM          NNNNNNNN                                  |
+//      |                MMMMMMMMM    MMMMMMMM         NNNNNNNNN                                  |
+//      |                MMMMMMMM     MMMMMMM          NNNNNNNN                                   |
+//      |               MMMMMMMM     MMMMMMM          NNNNNNNNN                                   |
+//      |                           MMMMMMMM        NNNNNNNNNN                                    |
+//      |                          MMMMMMMMM       NNNNNNNNNNN                                    |
 //      |                          MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                |
 //      |                        MMMMMMM      E L E C T R O N I X         MMMMMM                  |
 //      |                         MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM                    |
@@ -148,6 +148,11 @@ class TStaticTimer
 {
     public:
         /**
+         * @brief onExpire callback handler type
+         */
+        typedef void(*OnExpireFunction)();
+
+        /**
          * @brief Construct a new TStaticTimer object
          * 
          */
@@ -209,7 +214,10 @@ template <class timer_t = uint32_t>
 class TCallbackTimer: public TBasicTimer<timer_t>
 {
     public:
-        
+        /**
+         * @brief onExpire callback handler type
+         */
+        typedef void(*OnExpireFunction)();
 
         /**
          * @brief Construct a new TCallbackTimer object with the provided timeout
@@ -283,5 +291,7 @@ using StaticTimer = TStaticTimer<TIMEOUT>;
  * Using a callback timer allows for easily changing the action of the timer at run time.
  */
 typedef TCallbackTimer<> CallbackTimer;
+
+#include "./BasicBlinker.h"
 
 #endif
