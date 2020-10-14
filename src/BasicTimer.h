@@ -293,5 +293,6 @@ using StaticTimer = TStaticTimer<TIMEOUT>;
 typedef TCallbackTimer<> CallbackTimer;
 
 #include "./BasicBlinker.h"
+#include "./SwitchableTimer.h"
 
 #endif

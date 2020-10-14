@@ -149,6 +149,7 @@ class BasicBlinker
         BasicBlinker& operator=(bool newState)
         {
             state = newState;
+            return *this;
         }
     protected:
         BasicTimer timer;
@@ -229,6 +230,7 @@ class StaticBlinker
         StaticBlinker& operator=(bool newState)
         {
             state = newState;
+            return *this;
         }
     protected:
         /**
@@ -303,6 +305,7 @@ class SwitchableBlinker: public BasicBlinker
         SwitchableBlinker& operator=(bool newState)
         {
             enabled = newState;
+            return *this;
         }
     protected:
         /**
