@@ -84,6 +84,12 @@ class TBasicTimer
         TBasicTimer(timer_t timeout):  lastReset(0), storedTimeout(timeout){};
 
         /**
+         * @brief Copy Constructor
+         */
+        TBasicTimer(const TBasicTimer<timer_t>& other): lastReset(other.lastReset),
+            storedTimeout(other.storedTimeout){};
+
+        /**
          * @brief Resets the timer (so that it is no longer expired)
          */
         void reset(){  lastReset = now(); };
@@ -101,12 +107,14 @@ class TBasicTimer
             else return false;
         }
 
+        timer_t timeout() const { return storedTimeout; };
+        
         /**
          * @brief Get the current time in milliseconds
          * 
          * @return timer_t The current time in milliseconds
          */
-        timer_t now()
+        static timer_t now()
         {
             return millis();
         }
