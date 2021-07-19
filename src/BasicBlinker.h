@@ -91,6 +91,11 @@ class BasicBlinker
             timer.setTimeout(blinkTime);
         }
 
+        uint32_t blinkTime() const 
+        {
+            return timer.timeout();
+        }
+
         /**
          * @brief Update the state of the blinker based on elapsed tiem.
          * 
