@@ -55,8 +55,8 @@
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#ifndef _BASIC_TIMER_H_
-#define _BASIC_TIMER_H_
+#ifndef _BASIC_TIMERS_BASIC_TIMER_H_
+#define _BASIC_TIMERS_BASIC_TIMER_H_
 
 #include <Arduino.h>
 
@@ -100,13 +100,18 @@ class TBasicTimer
          * @return true If the timer has expired
          * @return false If it has yet to expire
          */
-        bool hasExpired() 
+        bool hasExpired() const
         {
             auto current = now();
             if (current -  lastReset > storedTimeout) return true;
             else return false;
         }
 
+        /**
+         * @brief Returns the timer's stored timeout time in milliseconds
+         * 
+         * @return timer_t 
+         */
         timer_t timeout() const { return storedTimeout; };
         
         /**
@@ -119,6 +124,15 @@ class TBasicTimer
             return millis();
         }
 
+        /**
+         * @brief The amount of time that has elapsed since the timer
+         *        was last reset in milliseconds.
+         * 
+         * @return timer_t 
+         */
+        timer_t elapsedTime() const {
+            return (now() - lastReset);
+        }
         /**
          * @brief Set the timer's timeout to the supplied value
          * 
@@ -303,4 +317,4 @@ typedef TCallbackTimer<> CallbackTimer;
 #include "./BasicBlinker.h"
 #include "./SwitchableTimer.h"
 
-#endif
+#endif /* _BASIC_TIMERS_BASIC_TIMER_H_*/
