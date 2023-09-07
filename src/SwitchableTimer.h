@@ -65,21 +65,29 @@ class SwitchableTimer: public BasicTimer
 {
     public:
         SwitchableTimer(uint32_t timeout): BasicTimer(timeout){};
+        
         void enable()
         {   
             this->reset();
             enabled = true; 
         };
+
         void enable(bool state)
         { 
             this->reset();
             enabled = state; 
         };
+
         void disable()
         { 
             this->reset();
             enabled = false; 
         };
+
+        bool isEnabled() const {
+            return enabled;
+        }
+
         bool hasFinished()
         {
             if (!enabled)
@@ -98,21 +106,29 @@ class StaticSwitchableTimer: public StaticTimer<TIMEOUT>
 {
     public:
         StaticSwitchableTimer(): StaticTimer<TIMEOUT>(){};
+
         void enable()
         {   
             this->reset();
             enabled = true; 
         };
+
         void enable(bool state)
         { 
             this->reset();
             enabled = state; 
         };
+        
         void disable()
         { 
             this->reset();
             enabled = false; 
         };
+
+        bool isEnabled() const {
+            return enabled;
+        }
+
         bool hasFinished()
         {
             if (!enabled)

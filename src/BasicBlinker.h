@@ -56,8 +56,8 @@
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#ifndef _BASIC_BLINKER_H_
-#define _BASIC_BLINKER_H_
+#ifndef _BASIC_TIMER_BASIC_BLINKER_H_
+#define _BASIC_TIMER_BASIC_BLINKER_H_
 
 #include "./BasicTimer.h"
 
@@ -82,7 +82,8 @@ class BasicBlinker
         BasicBlinker(uint32_t timeout): timer(timeout){};
 
         /**
-         * @brief Set the blink time for the blinker
+         * @brief Set the blink time for the blinker, which is the amount of time
+         *        the blinker is on or off (one-half the period).
          * 
          * @param blinkTime The new time in milliseconds
          */
@@ -91,13 +92,21 @@ class BasicBlinker
             timer.setTimeout(blinkTime);
         }
 
+
+        /**
+         * @brief Returns the set blink time, which is the amount of time
+         *        the blinker is on or off (one-half the period).
+         * 
+         * @return uint32_t 
+         */
         uint32_t blinkTime() const 
         {
             return timer.timeout();
         }
 
         /**
-         * @brief Update the state of the blinker based on elapsed tiem.
+         * @brief Update the state of the blinker based on elapsed time.
+         *        Should be called at least every loop.
          * 
          */
         void run()
@@ -110,7 +119,8 @@ class BasicBlinker
         }
 
         /**
-         * @brief Update the state of the blinker based on elapsed tiem.
+         * @brief Updates the state of the blinker based on elapsed time, 
+         *        returning the current blink state as a result.
          * 
          * @return The current blinker state (true or false)
          */
@@ -134,7 +144,7 @@ class BasicBlinker
          * 
          * @return The current blinker state (true or false)
          */
-        bool getState(){ return state; };
+        bool getState() const { return state; };
 
         /**
          * @brief Implicit casting to boolean gets the blinker state.
@@ -143,7 +153,7 @@ class BasicBlinker
          * 
          * @return The current blinker state (true or false)
          */
-        operator bool(){ return state; };
+        operator bool() const { return state; };
 
         /**
          * @brief Sets the boolean state of the blinker by assignment
@@ -186,6 +196,7 @@ class StaticBlinker
             if (timer.hasExpired())
             {
                 timer.reset();
+
                 state = !state;
             }
         }
@@ -215,7 +226,7 @@ class StaticBlinker
          * 
          * @return The current blinker state (true or false)
          */
-        bool getState(){ return state; };
+        bool getState() const { return state; };
 
         /**
          * @brief Implicit casting to boolean gets the blinker state.
@@ -224,7 +235,7 @@ class StaticBlinker
          * 
          * @return The current blinker state (true or false)
          */
-        operator bool(){ return state; };
+        operator bool() const { return state; };
 
         /**
          * @brief Sets the boolean state of the blinker by assignment
@@ -236,6 +247,17 @@ class StaticBlinker
         {
             state = newState;
             return *this;
+        }
+
+        /**
+         * @brief Returns the set blink time, which is the amount of time
+         *        the blinker is on or off (one-half the period).
+         * 
+         * @return uint32_t 
+         */
+        static constexpr uint32_t blinkTime()
+        {
+            return TIMEOUT;
         }
     protected:
         /**
@@ -250,7 +272,8 @@ class StaticBlinker
 
 /**
  * @brief Extension of BasicBlinker that can be turned on and off.
- *        A disabled blinker will awalys be set to true.
+ *        A disabled blinker will always be set to true.
+ * 
  * @see BasicBlinker
  */
 class SwitchableBlinker: public BasicBlinker 
@@ -269,24 +292,31 @@ class SwitchableBlinker: public BasicBlinker
          * @return true if enabled/
          * @return false if disabled.
          */
-        bool isEnabled(){ return enabled; };
+        bool isEnabled() const { return enabled; };
 
         /**
          * @brief Enables the blinker (blinker will toggle)
          */
-        void enable(){ enabled = true; };
+        void enable(bool shouldEnable = true){ enabled = shouldEnable; };
 
         /**
          * @brief Disables the blinker (blinker will always be true)
          */
-        void disable(){ enabled = false; };
+        void disable(){ enable(false); };
+
+
+        /**
+         * @brief Toggles the blinker's enabled state (if enabled, disables it
+         *        and vice-versa).
+         */
+        void toggleEnabled() { enable(!enabled); };
 
         /**
          * @brief Get the current state of the blinker (does not update the blinker)
          * 
          * @return The current blinker state (true or false)
          */
-        bool getState()
+        bool getState() const
         {
             if (enabled) return state;
             else return true;
@@ -299,7 +329,7 @@ class SwitchableBlinker: public BasicBlinker
          * 
          * @return The current blinker state (true or false)
          */
-        operator bool(){ return getState(); };
+        operator bool() const { return getState(); };
 
         /**
          * @brief Turns the blinker on and off by assignment
@@ -393,4 +423,4 @@ class StaticSwitchableBlinker: public StaticBlinker<TIMEOUT>
 };
 
 
-#endif
+#endif /* _BASIC_TIMER_BASIC_BLINKER_H_ */
