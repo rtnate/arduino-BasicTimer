@@ -56,8 +56,8 @@
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#ifndef _BASIC_BLINKER_H_
-#define _BASIC_BLINKER_H_
+#ifndef _BASIC_TIMER_BASIC_BLINKER_H_
+#define _BASIC_TIMER_BASIC_BLINKER_H_
 
 #include "./BasicTimer.h"
 
@@ -196,6 +196,7 @@ class StaticBlinker
             if (timer.hasExpired())
             {
                 timer.reset();
+
                 state = !state;
             }
         }
@@ -308,7 +309,7 @@ class SwitchableBlinker: public BasicBlinker
          * @brief Toggles the blinker's enabled state (if enabled, disables it
          *        and vice-versa).
          */
-        void toggleEnabled() { enable(!enabled) };
+        void toggleEnabled() { enable(!enabled); };
 
         /**
          * @brief Get the current state of the blinker (does not update the blinker)
@@ -422,4 +423,4 @@ class StaticSwitchableBlinker: public StaticBlinker<TIMEOUT>
 };
 
 
-#endif
+#endif /* _BASIC_TIMER_BASIC_BLINKER_H_ */
