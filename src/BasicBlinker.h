@@ -185,7 +185,7 @@ class StaticBlinker
         /**
          * @brief Construct a new StaticBlinker
          */
-        StaticBlinker<TIMEOUT>(): timer(){};
+        StaticBlinker(): timer(){};
 
         /**
          * @brief Update the state of the blinker based on elapsed tiem.
