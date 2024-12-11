@@ -159,11 +159,11 @@ class BasicTimer
          * @param resetOnExpire If true, the timer will reset every time 
          *                      (executing callback after every timeout period)
          */
-        void whenExpired(void(*callback)(), bool resetOnExpire = false)
+        void whenExpired(void(*callback)(), bool resetOnExpire = true)
         {
             if(hasExpired())
             {
-                reset();
+                if (resetOnExpire) reset();
                 callback();
             }
         }
@@ -221,6 +221,12 @@ class StaticTimer
         void reset(){  lastReset = now(); };
 
         /**
+         *  @brief Prepares the timer for use, equivalent to reset()
+         *  @see reset()
+         */
+        void begin(){ reset(); };
+
+        /**
          * @brief Checks it the timer has expired
          * 
          * @return true If the timeout has passed
@@ -237,7 +243,7 @@ class StaticTimer
          * 
          * @return unsigned long The current timestamp in milliseconds
          */
-        unsigned long now()
+        unsigned long now() const
         {
             return millis();
         }
@@ -253,13 +259,20 @@ class StaticTimer
         }
 
         /**
+         * @brief Returns the timer's stored timeout time in milliseconds
+         * 
+         * @return unsigned long 
+         */
+        static constexpr unsigned long timeout() { return TIMEOUT; };
+
+        /**
          * @brief Runs the timer, executing the supplied function if the timer has expired.
          * 
          * @param callback The function to execute
          * @param resetOnExpire If true, the timer will reset every time 
          *                      (executing callback after every timeout period)
          */
-        void whenExpired(OnExpireFunction callback, bool resetOnExpire = false)
+        void whenExpired(OnExpireFunction callback, bool resetOnExpire = true)
         {
             if(hasExpired())
             {
@@ -269,23 +282,24 @@ class StaticTimer
         }
 
         /**
-         * @brief Runs the timer, executing the supplied function if the timer has expired.
+         * @brief Runs the timer, executing the supplied function after each timeout
          * 
-         * @param callback The function to execute
-         * @param resetOnExpire If true, the timer will reset every time 
-         *                      (executing callback after every timeout period)
+         * @tparam ArgumentType Type of argument for the callback 
+         *          (for template deduction)
+         * @param callback  The function to execute when the timer expires
+         * @param callbackArg Argument that will be supplied to the 
+         *                    function when it expires
          */
-        template<typename CallbackArgumentType>
-        void whenExpired(OnExpireFunction callback, bool resetOnExpire = false)
+        template<typename ArgumentType>
+        void whenExpired(void(*callback)(ArgumentType arg), 
+                         ArgumentType callbackArg)
         {
             if(hasExpired())
             {
-                if (resetOnExpire) reset();
-                callback();
+                reset();
+                callback(callbackArg);
             }
         }
-
-
 
     protected:
         unsigned long  lastReset;
